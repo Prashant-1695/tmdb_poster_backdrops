@@ -33,6 +33,7 @@ type SearchItem = {
 
 type ImageInfo = {
   url: string
+  thumbUrl: string
   width: number
   height: number
   language: string | null
@@ -236,7 +237,13 @@ export function TmdbSearch() {
         </CardHeader>
         <Divider className="bg-white/10" />
         <CardBody className="flex flex-col gap-4">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (canSearch) handleSearch()
+            }}
+            className="flex flex-col md:flex-row items-stretch md:items-end gap-3"
+          >
             <Input
               label="Title"
               labelPlacement="outside"
@@ -244,16 +251,11 @@ export function TmdbSearch() {
               onValueChange={setQuery}
               placeholder="e.g. Dune, Avatar, The Office"
               size="lg"
-              className="w-full md:flex-1"
+              className="flex-1"
               classNames={{
                 inputWrapper: "bg-white/5 data-[hover=true]:bg-white/10",
                 input: "text-white placeholder:text-white/50",
-                label: "text-white",
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && canSearch) {
-                  handleSearch()
-                }
+                label: "text-white mb-1",
               }}
               endContent={
                 <Kbd keys={["enter"]} className="bg-white/10 text-white/80">
@@ -262,15 +264,15 @@ export function TmdbSearch() {
               }
             />
             <Button
+              type="submit"
               color="primary"
               size="lg"
               className="btn-gradient btn-gradient-primary shrink-0"
               isDisabled={!canSearch || loading}
-              onPress={handleSearch}
             >
               {loading ? <Spinner size="sm" color="default" /> : "Search"}
             </Button>
-          </div>
+          </form>
           {error && (
             <p className="text-danger-500 text-sm" role="alert">
               {error}
@@ -392,7 +394,7 @@ export function TmdbSearch() {
                             aria-label="Preview poster"
                           >
                             <Thumbnail
-                              src={img.url}
+                              src={img.thumbUrl}
                               alt={`Poster ${idx + 1} for ${selected?.title || "title"}`}
                               ratio="2/3"
                             />
@@ -429,7 +431,7 @@ export function TmdbSearch() {
                             aria-label="Preview backdrop"
                           >
                             <Thumbnail
-                              src={img.url}
+                              src={img.thumbUrl}
                               alt={`Backdrop ${idx + 1} for ${selected?.title || "title"}`}
                               ratio="16/9"
                             />

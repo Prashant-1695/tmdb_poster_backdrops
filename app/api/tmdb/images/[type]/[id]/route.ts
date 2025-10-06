@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY
 const IMG_BASE = "https://image.tmdb.org/t/p/original"
+const POSTER_THUMB = "https://image.tmdb.org/t/p/w500"
+const BACKDROP_THUMB = "https://image.tmdb.org/t/p/w780"
 const ALL_LANGS =
   "null,en,fr,es,de,it,ru,ja,zh,ko,pt,hi,ar,pl,sv,da,no,fi,nl,tr,cs,el,he,hu,ro,uk,vi,th,ms,sk,sl,bg,hr,lt,lv,et,fa,id"
 
@@ -42,6 +44,7 @@ export async function GET(_req: Request, { params }: { params: { type: string; i
 
     const posters = (images.posters || []).map((p: any) => ({
       url: `${IMG_BASE}${p.file_path}`,
+      thumbUrl: `${POSTER_THUMB}${p.file_path}`,
       width: p.width as number,
       height: p.height as number,
       language: p.iso_639_1 as string | null,
@@ -50,6 +53,7 @@ export async function GET(_req: Request, { params }: { params: { type: string; i
 
     const backdrops = (images.backdrops || []).map((b: any) => ({
       url: `${IMG_BASE}${b.file_path}`,
+      thumbUrl: `${BACKDROP_THUMB}${b.file_path}`,
       width: b.width as number,
       height: b.height as number,
       language: b.iso_639_1 as string | null,
