@@ -473,18 +473,16 @@ export function TmdbSearch() {
                   "Preview"
                 )}
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="p-0">
                 {preview && (
-                  <div className="w-full">
-                    <div className="relative w-full overflow-hidden rounded-md bg-white/5">
-                      <img
-                        src={preview.image.url || "/placeholder.svg"}
-                        alt="Preview image"
-                        className="w-full h-auto object-contain"
-                        crossOrigin="anonymous"
-                        loading="eager"
-                      />
-                    </div>
+                  <div className="w-full flex items-center justify-center bg-black">
+                    <img
+                      src={preview.image.url || "/placeholder.svg"}
+                      alt="Preview image"
+                      className="max-w-full max-h-[70vh] w-auto h-auto object-contain"
+                      crossOrigin="anonymous"
+                      loading="eager"
+                    />
                   </div>
                 )}
               </ModalBody>
