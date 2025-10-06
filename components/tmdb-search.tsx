@@ -8,7 +8,6 @@ import {
   CardHeader,
   Chip,
   Divider,
-  Image as NextUIImage,
   Input,
   Kbd,
   Link,
@@ -46,6 +45,34 @@ type ImagesPayload = {
   title?: string
   year?: number
   type?: "movie" | "tv"
+}
+
+const Thumbnail = ({
+  src,
+  alt,
+  ratio,
+}: {
+  src: string
+  alt: string
+  ratio: "2/3" | "16/9"
+}) => {
+  return (
+    <div
+      className={
+        ratio === "2/3"
+          ? "relative w-full aspect-[2/3] overflow-hidden rounded-md bg-white/5"
+          : "relative w-full aspect-[16/9] overflow-hidden rounded-md bg-white/5"
+      }
+    >
+      <img
+        src={src || "/placeholder.svg"}
+        alt={alt}
+        className="absolute inset-0 h-full w-full object-cover"
+        crossOrigin="anonymous"
+        loading="lazy"
+      />
+    </div>
+  )
 }
 
 export function TmdbSearch() {
@@ -212,10 +239,12 @@ export function TmdbSearch() {
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             <Input
               label="Title"
+              labelPlacement="outside"
               value={query}
               onValueChange={setQuery}
               placeholder="e.g. Dune, Avatar, The Office"
               size="lg"
+              className="w-full md:flex-1"
               classNames={{
                 inputWrapper: "bg-white/5 data-[hover=true]:bg-white/10",
                 input: "text-white placeholder:text-white/50",
@@ -235,7 +264,7 @@ export function TmdbSearch() {
             <Button
               color="primary"
               size="lg"
-              className="btn-gradient btn-gradient-primary"
+              className="btn-gradient btn-gradient-primary shrink-0"
               isDisabled={!canSearch || loading}
               onPress={handleSearch}
             >
@@ -362,13 +391,10 @@ export function TmdbSearch() {
                             onClick={() => openPreview(img, "posters")}
                             aria-label="Preview poster"
                           >
-                            <NextUIImage
+                            <Thumbnail
                               src={img.url}
                               alt={`Poster ${idx + 1} for ${selected?.title || "title"}`}
-                              className="rounded-md"
-                              radius="md"
-                              shadow="md"
-                              loading="lazy"
+                              ratio="2/3"
                             />
                           </button>
                           <figcaption className="mt-1 text-xs text-white/70 flex items-center justify-between gap-2">
@@ -402,13 +428,10 @@ export function TmdbSearch() {
                             onClick={() => openPreview(img, "backdrops")}
                             aria-label="Preview backdrop"
                           >
-                            <NextUIImage
+                            <Thumbnail
                               src={img.url}
                               alt={`Backdrop ${idx + 1} for ${selected?.title || "title"}`}
-                              className="rounded-md"
-                              radius="md"
-                              shadow="md"
-                              loading="lazy"
+                              ratio="16/9"
                             />
                           </button>
                           <figcaption className="mt-1 text-xs text-white/70 flex items-center justify-between gap-2">
@@ -451,13 +474,15 @@ export function TmdbSearch() {
               <ModalBody>
                 {preview && (
                   <div className="w-full">
-                    <NextUIImage
-                      src={preview.image.url}
-                      alt="Preview image"
-                      className="rounded-md"
-                      radius="md"
-                      shadow="md"
-                    />
+                    <div className="relative w-full overflow-hidden rounded-md bg-white/5">
+                      <img
+                        src={preview.image.url || "/placeholder.svg"}
+                        alt="Preview image"
+                        className="w-full h-auto object-contain"
+                        crossOrigin="anonymous"
+                        loading="eager"
+                      />
+                    </div>
                   </div>
                 )}
               </ModalBody>
